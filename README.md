@@ -1,43 +1,66 @@
-# tas
-Code used to perform the analyses in Rohlfs, Chris, 2023. "Forbidden Knowledge and Specialized Training: A Versatile Solution for the Two Main Sources of Overfitting in Linear Regression," The American Statistician 77(2): 160-8. https://doi.org/10.1080/00031305.2022.2128874
+# tas: Forbidden Knowledge and Specialized Training
 
-baseline.empirical.R - Computes the baseline specification for the empirical application
+This repository contains the code used to perform the analyses in the paper:
 
-specifications:
+Rohlfs, Chris, 2023. "Forbidden Knowledge and Specialized Training: A Versatile Solution for the Two Main Sources of Overfitting in Linear Regression," *The American Statistician*, 77(2): 160-8.  
+[https://doi.org/10.1080/00031305.2022.2128874](https://doi.org/10.1080/00031305.2022.2128874)
 
-line 7: cores <- 20 #for multicore processing.
+## Overview
 
-Note that, because parallel processing was used, seed does not suffice to exactly replicate paper results.
+This repository includes scripts for both the empirical application and the Monte Carlo simulations presented in the paper. Below are descriptions of the key scripts, specifications, inputs, and outputs.
 
-line 177: pct <- 0.50 #determines fraction of sample to be used for training
+### Empirical Analysis
 
-inputs:
+- **`baseline.empirical.R`**  
+  Computes the baseline specification for the empirical application.
 
-mri.RDS - cleaned predictors and outcomes from the Neurocognitive Aging Data.
+  **Key Specifications:**
+  - **line 7**: `cores <- 20` (for multicore processing).
+    - Parallel processing is used, so exact replication of the paper's results using `set.seed` is not guaranteed.
+  - **line 177**: `pct <- 0.50` (determines fraction of the sample to be used for training).
 
-outputs:
+  **Inputs:**
+  - `mri.RDS`: Cleaned predictors and outcomes from the Neurocognitive Aging Data.
 
-components.RDS - large (~0.6 gig) file containing a data.table of results by observation, iteration, & spec
+  **Outputs:**
+  - `components.RDS`: Large (~0.6 GB) file containing a `data.table` of results by observation, iteration, and specification.
+  - `rss.RDS`: Smaller `data.table` with summary statistics for each specification and iteration.
+  - `MRI_50pct_rss.png`: Sample output graph; additional graphs are in `doc.graphs.R`.
 
-rss.RDS - smaller data.table with summary statistics for each specification & iteration
+### Monte Carlo Simulation
 
-MRI_50pct_rss.png - sample output graph; more in doc.graphs.R
+- **`baseline.simulation.R`**  
+  Computes the baseline specification for the Monte Carlo simulation.
 
-baseline.simulation.R - Computes the baseline specification for the Monte Carlo simulation
+  **Specifications:**  
+  Specification details are in lines 6 to 13.  
+  For homoskedastic specifications, data generation and specification details differ slightly.  
+  A sample version of this calculation is in `homosked45_125.R`.
 
-specifications:
+  **Outputs:**
+  - `simulation.data.hetero.txt`: Text version of components (similar to the empirical analysis). Saved as a text file to use the "append" function, given the large size (some versions can be as large as 25-30 GB).
+  - `sims.RDS`: Smaller `data.table` with summary statistics for each specification and iteration.
 
-lines 6 to 13 contain specification details.
+- **`homosked45_125.R`**  
+  Computes an alternative homoskedastic specification for the Monte Carlo simulation.
 
-Note: for homoskedastic specification, data generation & specification details are slightly different. A sample version of that calculation appears in homosked45_125.R
+## Citing This Work
 
-	outputs:
+If you use this code or the results from the paper in your research, please cite the following publication:
 
-simulation.data.hetero.txt - text version of components (as in empirical). Saved as text so that "append" can be used given the large size of the file. Some versions (depending on parameters) get as large as 25-30 gigabytes
-
-		sims.RDS - smaller data.table with summary statistics for each specification & iteration
-
-homosked45_125.R - Computes an alternative homoskedastic specification for Monte Carlo
+```bibtex
+@article{rohlfs2023forbidden,
+  title={Forbidden Knowledge and Specialized Training: A Versatile Solution for the Two Main Sources of Overfitting in Linear Regression},
+  author={Rohlfs, Chris},
+  journal={The American Statistician},
+  volume={77},
+  number={2},
+  pages={160--168},
+  year={2023},
+  publisher={Taylor \& Francis},
+  doi={10.1080/00031305.2022.2128874}
+}
+```
 
 - Note: also calculates some extra statistics related to MAPE (used in figures) and sigmas
 
